@@ -58,6 +58,16 @@
         name: 'TH1 bài2',
         component: './TH2' ,   
     },
+	{
+        path: '/thuc-hanh-1',
+        name: 'TH2 bài1',
+        component: './BAI1TH2' ,   
+    },
+	{
+        path: '/thuc-hanh-2',
+        name: 'TH2 bài2',
+        component: './BAI2TH2' ,   
+    },
 	
 
 
