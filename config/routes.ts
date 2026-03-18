@@ -68,7 +68,11 @@
         name: 'TH2 bài2',
         component: './BAI2TH2' ,   
     },
-	
+	{
+        path: '/thuc-hanh-3',
+        name: 'TH3',
+        component: './TH3' ,   
+    },
 
 
 	// DANH MUC HE THONG
