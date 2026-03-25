@@ -73,6 +73,11 @@
         name: 'TH3',
         component: './TH3' ,   
     },
+	{
+        path: '/thuc-hanh-4',
+        name: 'TH4',
+        component: './TH4' ,   
+    },
 
 
 	// DANH MUC HE THONG
