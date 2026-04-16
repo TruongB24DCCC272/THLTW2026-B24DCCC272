@@ -97,6 +97,12 @@
 		icon: 'TableOutlined',
         component: './TH6' ,   
     },
+	{
+        path: '/KTGK',
+        name: 'KTGK',
+		icon: 'TableOutlined',
+        component: './KTGK' ,   
+    },
 
 
 	// DANH MUC HE THONG
