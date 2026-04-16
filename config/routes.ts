@@ -51,35 +51,47 @@
 	{
         path: '/th1',
         name: 'TH1 bài1',
-        component: './TH1' ,   
-        component: './BAI1TH1' ,   
+		icon: 'TableOutlined',
+        component: 'BAI1TH1' ,   
     },
 	{
         path: '/th2',
-        name: 'TH1 bài2',  
+        name: 'TH1 bài2',
 		icon: 'TableOutlined',
-        component: './BAI2TH1' ,  
+        component: 'BAI2TH1' ,   
     },
 	{
         path: '/thuc-hanh-1',
         name: 'TH2 bài1',
+		icon: 'TableOutlined',
         component: './BAI1TH2' ,   
     },
 	{
         path: '/thuc-hanh-2',
         name: 'TH2 bài2',
+		icon: 'TableOutlined',
         component: './BAI2TH2' ,   
     },
 	{
         path: '/thuc-hanh-3',
         name: 'TH3',
+		icon: 'TableOutlined',
         component: './TH3' ,   
     },
 	{
         path: '/thuc-hanh-4',
         name: 'TH4',
+		icon: 'TableOutlined',
+
         component: './TH4' ,   
     },
+	{
+        path: '/thuc-hanh-5',
+        name: 'TH5',
+		icon: 'TableOutlined',
+        component: './TH5' ,   
+    },
+	
 
 
 	// DANH MUC HE THONG
