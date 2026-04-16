@@ -3,10 +3,22 @@ import { Button, Card, List, Typography, Space, Row, Col } from 'antd';
 
 const { Title } = Typography;
 
-const choices = ['Kéo', 'Búa', 'Bao'];
+const choices = ['Kéo', 'Búa', 'Bao'] as const;
 
-const getResult = (player, computer) => {
+type Choice = typeof choices[number];
+
+type Result = 'Thắng' | 'Thua' | 'Hòa';
+
+interface HistoryItem {
+  key: number;
+  player: Choice;
+  computer: Choice;
+  result: Result;
+}
+
+const getResult = (player: Choice, computer: Choice): Result => {
   if (player === computer) return 'Hòa';
+
   if (
     (player === 'Kéo' && computer === 'Bao') ||
     (player === 'Búa' && computer === 'Kéo') ||
@@ -14,34 +26,40 @@ const getResult = (player, computer) => {
   ) {
     return 'Thắng';
   }
+
   return 'Thua';
 };
 
-const getRandomChoice = () => choices[Math.floor(Math.random() * choices.length)];
+const getRandomChoice = (): Choice =>
+  choices[Math.floor(Math.random() * choices.length)];
 
-const RPSGame = () => {
-  const [history, setHistory] = useState([]);
+const RPSGame: React.FC = () => {
+  const [history, setHistory] = useState<HistoryItem[]>([]);
 
-  const play = (playerChoice) => {
+  const play = (playerChoice: Choice): void => {
     const computerChoice = getRandomChoice();
     const result = getResult(playerChoice, computerChoice);
-    const record = {
+
+    const record: HistoryItem = {
       key: history.length + 1,
       player: playerChoice,
       computer: computerChoice,
       result,
     };
+
     setHistory([record, ...history]);
   };
 
   return (
     <div style={{ padding: 24 }}>
       <Title level={3}>Bài 1: Trò chơi Oẳn Tù Tì</Title>
+
       <p>
         Người chơi chọn Kéo, Búa, hoặc Bao. Máy tính cũng chọn một lựa chọn ngẫu
         nhiên. So sánh kết quả để xác định thắng/thua/hòa. Hiển thị lịch sử kết
         quả mỗi ván đấu.
       </p>
+
       <Card style={{ marginTop: 16 }}>
         <Space>
           {choices.map((c) => (
@@ -57,7 +75,7 @@ const RPSGame = () => {
         bordered
         dataSource={history}
         style={{ marginTop: 24 }}
-        renderItem={(item) => (
+        renderItem={(item: HistoryItem) => (
           <List.Item>
             <Row style={{ width: '100%' }}>
               <Col span={6}>Bạn: {item.player}</Col>

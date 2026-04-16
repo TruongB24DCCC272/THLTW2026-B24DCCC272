@@ -4,35 +4,39 @@ import { Card, Input, Button, Typography, Space, Alert } from 'antd';
 const { Text } = Typography;
 const MAX_ATTEMPTS = 10;
 
-export default function TH1() {
-  const generateNumber = () => Math.floor(Math.random() * 100) + 1;
+type AlertType = 'success' | 'info' | 'warning' | 'error';
 
-  const [target, setTarget] = useState(generateNumber());
-  const [guess, setGuess] = useState('');
-  const [message, setMessage] = useState('');
-  const [attempts, setAttempts] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [status, setStatus] = useState('info');
+export default function TH1(): JSX.Element {
+  const generateNumber = (): number => Math.floor(Math.random() * 100) + 1;
 
-  const resetGame = () => {
+  const [target, setTarget] = useState<number>(generateNumber());
+  const [guess, setGuess] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [attempts, setAttempts] = useState<number>(0);
+  const [finished, setFinished] = useState<boolean>(false);
+  const [status, setStatus] = useState<AlertType>('info');
+
+  const resetGame = (): void => {
     setTarget(generateNumber());
     setGuess('');
     setMessage('');
     setAttempts(0);
     setFinished(false);
+    setStatus('info');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (finished) return;
 
-    const n = parseInt(guess, 10);
+    const n: number = parseInt(guess, 10);
+
     if (isNaN(n) || n < 1 || n > 100) {
       setMessage('Vui lòng nhập số từ 1 đến 100');
       setStatus('warning');
       return;
     }
 
-    const next = attempts + 1;
+    const next: number = attempts + 1;
     setAttempts(next);
 
     if (n === target) {

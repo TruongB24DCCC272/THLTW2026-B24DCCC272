@@ -17,13 +17,13 @@ const { Title } = Typography;
 
 const difficultyLevels = ["Dễ", "Trung bình", "Khó", "Rất khó"];
 
-export default function QuestionBankSystem() {
+export default function QuestionBankSystem(): JSX.Element {
 
-  const [blocks, setBlocks] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [structures, setStructures] = useState([]);
-  const [exams, setExams] = useState([]);
+  const [blocks, setBlocks] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [structures, setStructures] = useState<any[]>([]);
+  const [exams, setExams] = useState<any[]>([]);
 
   const [blockName, setBlockName] = useState("");
 
@@ -46,28 +46,28 @@ export default function QuestionBankSystem() {
     difficulty: ""
   });
 
-  const [structure, setStructure] = useState({
+  const [structure, setStructure] = useState<any>({
     subject: "",
     easy: 0,
     medium: 0,
     hard: 0
   });
 
-  // thêm khối kiến thức
+  // ================= BLOCK =================
   const addBlock = () => {
+    if (!blockName) return;
     setBlocks([...blocks, blockName]);
     setBlockName("");
   };
 
-  // thêm môn học
+  // ================= SUBJECT =================
   const addSubject = () => {
     setSubjects([...subjects, subject]);
     setSubject({ code: "", name: "", credit: "" });
   };
 
-  // thêm câu hỏi
+  // ================= QUESTION =================
   const addQuestion = () => {
-
     const newQ = {
       id: questions.length + 1,
       ...question
@@ -85,28 +85,21 @@ export default function QuestionBankSystem() {
     message.success("Đã thêm câu hỏi");
   };
 
-  // tìm kiếm câu hỏi
-  const filteredQuestions = questions.filter(q => {
+  // ================= FILTER =================
+  const filteredQuestions = questions.filter(q =>
+    (!search.subject || q.subject === search.subject) &&
+    (!search.block || q.block === search.block) &&
+    (!search.difficulty || q.difficulty === search.difficulty)
+  );
 
-    return (
-      (!search.subject || q.subject === search.subject) &&
-      (!search.block || q.block === search.block) &&
-      (!search.difficulty || q.difficulty === search.difficulty)
-    );
-
-  });
-
-  // lưu cấu trúc đề
+  // ================= STRUCTURE =================
   const saveStructure = () => {
-
     setStructures([...structures, structure]);
-
     message.success("Đã lưu cấu trúc đề");
-
   };
 
-  // tạo đề thi
-  const generateExam = (s) => {
+  // ================= EXAM =================
+  const generateExam = (s: any) => {
 
     const easy = questions.filter(
       q => q.subject === s.subject && q.difficulty === "Dễ"
@@ -125,9 +118,7 @@ export default function QuestionBankSystem() {
       medium.length < s.medium ||
       hard.length < s.hard
     ) {
-
       message.error("Không đủ câu hỏi phù hợp!");
-
       return;
     }
 
@@ -138,27 +129,22 @@ export default function QuestionBankSystem() {
     ];
 
     setExams([...exams, exam]);
-
     message.success("Đã tạo đề thi");
-
   };
 
   return (
-
     <div style={{ padding: 24 }}>
-
       <Title level={3}>Hệ thống ngân hàng câu hỏi</Title>
 
       <Tabs>
 
-        {/* Khối kiến thức */}
+        {/* ================= BLOCK ================= */}
         <TabPane tab="Khối kiến thức" key="1">
-
           <Space>
             <Input
               placeholder="Tên khối"
               value={blockName}
-              onChange={(e)=>setBlockName(e.target.value)}
+              onChange={(e) => setBlockName(e.target.value)}
             />
             <Button type="primary" onClick={addBlock}>
               Thêm
@@ -168,33 +154,31 @@ export default function QuestionBankSystem() {
           <List
             bordered
             dataSource={blocks}
-            style={{ marginTop:20 }}
-            renderItem={(b)=> <List.Item>{b}</List.Item>}
+            style={{ marginTop: 20 }}
+            renderItem={(b) => <List.Item key={b}>{b}</List.Item>}
           />
-
         </TabPane>
 
-        {/* Môn học */}
+        {/* ================= SUBJECT ================= */}
         <TabPane tab="Môn học" key="2">
-
           <Space direction="vertical">
 
             <Input
               placeholder="Mã môn"
               value={subject.code}
-              onChange={(e)=>setSubject({...subject,code:e.target.value})}
+              onChange={(e) => setSubject({ ...subject, code: e.target.value })}
             />
 
             <Input
               placeholder="Tên môn"
               value={subject.name}
-              onChange={(e)=>setSubject({...subject,name:e.target.value})}
+              onChange={(e) => setSubject({ ...subject, name: e.target.value })}
             />
 
             <Input
               placeholder="Số tín chỉ"
               value={subject.credit}
-              onChange={(e)=>setSubject({...subject,credit:e.target.value})}
+              onChange={(e) => setSubject({ ...subject, credit: e.target.value })}
             />
 
             <Button type="primary" onClick={addSubject}>
@@ -206,53 +190,64 @@ export default function QuestionBankSystem() {
           <List
             bordered
             dataSource={subjects}
-            style={{ marginTop:20 }}
-            renderItem={(s)=>(
-              <List.Item>
+            style={{ marginTop: 20 }}
+            renderItem={(s) => (
+              <List.Item key={s.code}>
                 {s.code} - {s.name} ({s.credit} tín chỉ)
               </List.Item>
             )}
           />
-
         </TabPane>
 
-        {/* Câu hỏi */}
+        {/* ================= QUESTION ================= */}
         <TabPane tab="Câu hỏi" key="3">
 
           <Card>
-
             <Space direction="vertical">
 
               <Input
                 placeholder="Nội dung câu hỏi"
                 value={question.text}
-                onChange={(e)=>setQuestion({...question,text:e.target.value})}
+                onChange={(e) =>
+                  setQuestion({ ...question, text: e.target.value })
+                }
               />
 
               <Select
                 placeholder="Môn học"
-                onChange={(v)=>setQuestion({...question,subject:v})}
+                value={question.subject || undefined}
+                onChange={(v) => setQuestion({ ...question, subject: v })}
               >
-                {subjects.map(s=>(
-                  <Select.Option key={s.name}>{s.name}</Select.Option>
+                {subjects.map((s) => (
+                  <Select.Option key={s.name} value={s.name}>
+                    {s.name}
+                  </Select.Option>
                 ))}
               </Select>
 
               <Select
                 placeholder="Khối kiến thức"
-                onChange={(v)=>setQuestion({...question,block:v})}
+                value={question.block || undefined}
+                onChange={(v) => setQuestion({ ...question, block: v })}
               >
-                {blocks.map(b=>(
-                  <Select.Option key={b}>{b}</Select.Option>
+                {blocks.map((b) => (
+                  <Select.Option key={b} value={b}>
+                    {b}
+                  </Select.Option>
                 ))}
               </Select>
 
               <Select
                 placeholder="Mức độ khó"
-                onChange={(v)=>setQuestion({...question,difficulty:v})}
+                value={question.difficulty || undefined}
+                onChange={(v) =>
+                  setQuestion({ ...question, difficulty: v })
+                }
               >
-                {difficultyLevels.map(d=>(
-                  <Select.Option key={d}>{d}</Select.Option>
+                {difficultyLevels.map((d) => (
+                  <Select.Option key={d} value={d}>
+                    {d}
+                  </Select.Option>
                 ))}
               </Select>
 
@@ -261,89 +256,107 @@ export default function QuestionBankSystem() {
               </Button>
 
             </Space>
-
           </Card>
 
-          {/* tìm kiếm */}
-          <Card style={{marginTop:20}}>
-
+          {/* SEARCH */}
+          <Card style={{ marginTop: 20 }}>
             <Space>
 
               <Select
                 placeholder="Môn"
-                style={{width:150}}
-                onChange={(v)=>setSearch({...search,subject:v})}
+                style={{ width: 150 }}
+                value={search.subject || undefined}
+                onChange={(v) => setSearch({ ...search, subject: v })}
               >
-                {subjects.map(s=>(
-                  <Select.Option key={s.name}>{s.name}</Select.Option>
+                {subjects.map((s) => (
+                  <Select.Option key={s.name} value={s.name}>
+                    {s.name}
+                  </Select.Option>
                 ))}
               </Select>
 
               <Select
                 placeholder="Khối"
-                style={{width:150}}
-                onChange={(v)=>setSearch({...search,block:v})}
+                style={{ width: 150 }}
+                value={search.block || undefined}
+                onChange={(v) => setSearch({ ...search, block: v })}
               >
-                {blocks.map(b=>(
-                  <Select.Option key={b}>{b}</Select.Option>
+                {blocks.map((b) => (
+                  <Select.Option key={b} value={b}>
+                    {b}
+                  </Select.Option>
                 ))}
               </Select>
 
               <Select
                 placeholder="Mức độ"
-                style={{width:150}}
-                onChange={(v)=>setSearch({...search,difficulty:v})}
+                style={{ width: 150 }}
+                value={search.difficulty || undefined}
+                onChange={(v) =>
+                  setSearch({ ...search, difficulty: v })
+                }
               >
-                {difficultyLevels.map(d=>(
-                  <Select.Option key={d}>{d}</Select.Option>
+                {difficultyLevels.map((d) => (
+                  <Select.Option key={d} value={d}>
+                    {d}
+                  </Select.Option>
                 ))}
               </Select>
 
             </Space>
-
           </Card>
 
           <List
             bordered
             dataSource={filteredQuestions}
-            style={{marginTop:20}}
-            renderItem={(q)=>(
-              <List.Item>
+            style={{ marginTop: 20 }}
+            renderItem={(q) => (
+              <List.Item key={q.id}>
                 {q.text} | {q.subject} | {q.block} | {q.difficulty}
               </List.Item>
             )}
           />
-
         </TabPane>
 
-        {/* Cấu trúc đề thi */}
+        {/* ================= STRUCTURE ================= */}
         <TabPane tab="Cấu trúc đề" key="4">
 
           <Space direction="vertical">
 
             <Select
               placeholder="Môn học"
-              style={{width:200}}
-              onChange={(v)=>setStructure({...structure,subject:v})}
+              style={{ width: 200 }}
+              value={structure.subject || undefined}
+              onChange={(v) =>
+                setStructure({ ...structure, subject: v })
+              }
             >
-              {subjects.map(s=>(
-                <Select.Option key={s.name}>{s.name}</Select.Option>
+              {subjects.map((s) => (
+                <Select.Option key={s.name} value={s.name}>
+                  {s.name}
+                </Select.Option>
               ))}
             </Select>
 
             <InputNumber
-              placeholder="Số câu dễ"
-              onChange={(v)=>setStructure({...structure,easy:v})}
+              placeholder="Dễ"
+              onChange={(v) =>
+                setStructure({ ...structure, easy: v || 0 })
+              }
             />
 
             <InputNumber
-              placeholder="Số câu trung bình"
-              onChange={(v)=>setStructure({...structure,medium:v})}
+              placeholder="Trung bình"
+              onChange={(v) =>
+                setStructure({ ...structure, medium: v || 0 })
+              }
             />
 
             <InputNumber
-              placeholder="Số câu khó"
-              onChange={(v)=>setStructure({...structure,hard:v})}
+              placeholder="Khó"
+              onChange={(v) =>
+                setStructure({ ...structure, hard: v || 0 })
+              }
             />
 
             <Button type="primary" onClick={saveStructure}>
@@ -356,11 +369,11 @@ export default function QuestionBankSystem() {
             header="Danh sách cấu trúc"
             bordered
             dataSource={structures}
-            style={{marginTop:20}}
-            renderItem={(s,index)=>(
+            style={{ marginTop: 20 }}
+            renderItem={(s, index) => (
               <List.Item
                 actions={[
-                  <Button onClick={()=>generateExam(s)}>
+                  <Button key={index} onClick={() => generateExam(s)}>
                     Tạo đề
                   </Button>
                 ]}
@@ -369,27 +382,22 @@ export default function QuestionBankSystem() {
               </List.Item>
             )}
           />
-
         </TabPane>
 
-        {/* Đề thi */}
+        {/* ================= EXAM ================= */}
         <TabPane tab="Đề thi" key="5">
-
           <List
             bordered
             dataSource={exams}
-            renderItem={(exam,i)=>(
-              <List.Item>
-                Đề {i+1} - {exam.length} câu
+            renderItem={(exam, i) => (
+              <List.Item key={i}>
+                Đề {i + 1} - {exam.length} câu
               </List.Item>
             )}
           />
-
         </TabPane>
 
       </Tabs>
-
     </div>
-
   );
 }
