@@ -50,13 +50,15 @@
     },
 	{
         path: '/th1',
-        name: 'TH1 bài1',
-        component: './TH1' ,   
+        name: 'TH1 bài1',  
+		icon: 'TableOutlined',
+        component: './BAI1TH1' ,   
     },
 	{
         path: '/th2',
-        name: 'TH1 bài2',
-        component: './TH2' ,   
+        name: 'TH1 bài2',  
+		icon: 'TableOutlined',
+        component: './BAI2TH1' ,  
     },
 	{
         path: '/thuc-hanh-1',
