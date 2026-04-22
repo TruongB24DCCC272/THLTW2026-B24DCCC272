@@ -103,6 +103,12 @@
 		icon: 'TableOutlined',
         component: './KTGK' ,   
     },
+	{
+        path: '/thuc-hanh-7',
+        name: 'TH7',
+		icon: 'TableOutlined',
+        component: './TH7' ,   
+    },
 
 
 	// DANH MUC HE THONG
