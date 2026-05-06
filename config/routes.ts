@@ -115,6 +115,12 @@
 		icon: 'TableOutlined',
         component: './TH8' ,   
     },
+	{
+        path: '/thuc-hanh-9',
+        name: 'TH9',
+		icon: 'TableOutlined',
+        component: './TH9' ,   
+    },
 	
 
 
