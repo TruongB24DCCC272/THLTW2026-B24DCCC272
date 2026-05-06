@@ -115,6 +115,7 @@
 		icon: 'TableOutlined',
         component: './TH8' ,   
     },
+	
 
 
 	// DANH MUC HE THONG

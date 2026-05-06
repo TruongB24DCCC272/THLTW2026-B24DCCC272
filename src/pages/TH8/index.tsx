@@ -15,7 +15,7 @@ const { Header, Content, Sider } = Layout;
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
 
-// --- Interfaces ---
+
 interface Workout {
   id: string; date: string; type: string; duration: number; calories: number; notes: string; status: 'Hoàn thành' | 'Bỏ lỡ';
 }
@@ -30,7 +30,7 @@ interface LibraryExercise {
 }
 
 const FitnessApp: React.FC = () => {
-  // --- States ---
+
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [metrics, setMetrics] = useState<HealthMetric[]>([]);
@@ -38,19 +38,18 @@ const FitnessApp: React.FC = () => {
   const [exerciseFilter, setExerciseFilter] = useState('');
   const [goalFilter, setGoalFilter] = useState('Tất cả');
 
-  // --- Modals & Drawers States ---
+  
   const [isWorkoutModal, setIsWorkoutModal] = useState(false);
   const [isMetricModal, setIsMetricModal] = useState(false);
   const [isGoalDrawer, setIsGoalDrawer] = useState(false);
   const [isDetailModal, setIsDetailModal] = useState<{visible: boolean, data: any}>({visible: false, data: null});
   const [editingItem, setEditingItem] = useState<any>(null);
 
-  // --- Forms ---
+  
   const [workoutForm] = Form.useForm();
   const [metricForm] = Form.useForm();
   const [goalForm] = Form.useForm();
 
-  // --- BMI Logic ---
   const calcBMI = (w: number, h: number) => parseFloat((w / ((h / 100) * (h / 100))).toFixed(1));
   const getBMITag = (bmi: number) => {
     if (bmi < 18.5) return <Tag color="blue">Thiếu cân</Tag>;
@@ -59,7 +58,6 @@ const FitnessApp: React.FC = () => {
     return <Tag color="red">Béo phì</Tag>;
   };
 
-  // --- Thư viện bài tập mẫu ---
   const exerciseLibrary: LibraryExercise[] = [
     { id: '1', name: 'Plank', muscle: 'Core', difficulty: 'Dễ', description: 'Giữ tư thế chống đẩy bằng khuỷu tay', fullGuide: '1. Nằm sấp... 2. Nâng người bằng khuỷu tay... 3. Giữ lưng thẳng trong 60s.', calPerHour: 200 },
     { id: '2', name: 'Squat', muscle: 'Legs', difficulty: 'Trung bình', description: 'Đứng lên ngồi xuống với lưng thẳng', fullGuide: '1. Đứng rộng bằng vai... 2. Hạ mông như ngồi ghế... 3. Đẩy người lên.', calPerHour: 400 },
@@ -93,7 +91,7 @@ const FitnessApp: React.FC = () => {
         </Header>
 
         <Content style={{ margin: '24px', overflowY: 'auto' }}>
-          {/* 1. DASHBOARD */}
+     
           {activeMenu === 'dashboard' && (
             <div className="dashboard-content">
               <Row gutter={[16, 16]}>
@@ -128,7 +126,6 @@ const FitnessApp: React.FC = () => {
             </div>
           )}
 
-          {/* 2. NHẬT KÝ TẬP LUYỆN */}
           {activeMenu === 'workout' && (
             <Card title="Nhật ký tập luyện" extra={
               <Space>
@@ -153,7 +150,7 @@ const FitnessApp: React.FC = () => {
             </Card>
           )}
 
-          {/* 3. CHỈ SỐ SỨC KHỎE */}
+         
           {activeMenu === 'health' && (
             <Card title="Chỉ số cơ thể" extra={<Button type="primary" onClick={() => { metricForm.resetFields(); setIsMetricModal(true); }}>+ Cập nhật chỉ số</Button>}>
               <Table dataSource={metrics} rowKey="id" columns={[
@@ -168,7 +165,7 @@ const FitnessApp: React.FC = () => {
             </Card>
           )}
 
-          {/* 4. QUẢN LÝ MỤC TIÊU */}
+       
           {activeMenu === 'goals' && (
             <div className="goals-section">
               <Space direction="vertical" style={{ width: '100%' }}>
@@ -240,7 +237,6 @@ const FitnessApp: React.FC = () => {
             </div>
           )}
 
-          {/* 5. THƯ VIỆN BÀI TẬP */}
           {activeMenu === 'library' && (
             <div>
               <Input placeholder="Tìm kiếm bài tập..." style={{ marginBottom: 20, width: 300 }} onChange={e => setExerciseFilter(e.target.value)} />
@@ -259,7 +255,7 @@ const FitnessApp: React.FC = () => {
           )}
         </Content>
 
-        {/* Modal Bài tập */}
+        
         <Modal visible={isWorkoutModal} title={editingItem ? "Sửa buổi tập" : "Thêm buổi tập"} onCancel={() => setIsWorkoutModal(false)} onOk={() => workoutForm.submit()}>
           <Form form={workoutForm} layout="vertical" onFinish={(v) => {
             const newItem = { ...v, id: editingItem?.id || Date.now().toString(), date: v.date.format('YYYY-MM-DD') };
@@ -276,7 +272,6 @@ const FitnessApp: React.FC = () => {
           </Form>
         </Modal>
 
-        {/* Modal Chỉ số sức khỏe */}
         <Modal visible={isMetricModal} title="Cập nhật chỉ số" onCancel={() => setIsMetricModal(false)} onOk={() => metricForm.submit()}>
           <Form form={metricForm} layout="vertical" onFinish={(v) => {
              const bmi = calcBMI(v.weight || 0, v.height || 0);
@@ -292,7 +287,7 @@ const FitnessApp: React.FC = () => {
           </Form>
         </Modal>
 
-        {/* Drawer Mục tiêu */}
+    
         <Drawer 
           title="Thêm mục tiêu mới" 
           visible={isGoalDrawer} 
@@ -322,7 +317,6 @@ const FitnessApp: React.FC = () => {
           </Form>
         </Drawer>
 
-        {/* Modal Chi tiết bài tập */}
         <Modal visible={isDetailModal.visible} title={isDetailModal.data?.name} onCancel={() => setIsDetailModal({visible: false, data: null})} footer={null}>
           <p><strong>Nhóm cơ:</strong> {isDetailModal.data?.muscle}</p>
           <Divider orientation="left">Hướng dẫn</Divider>
